@@ -21,3 +21,5 @@ yarn-error.log
 /public/js/app.js
 /public/mix-manifest.json
 /DEVSENSE/packages-cache/authorizenet
+/storage_backup
+/storage
