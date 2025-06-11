@@ -1,0 +1,935 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec"
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
+type Media {
+  id: ID!,
+  model_type: String,
+  model_id: Int,
+  uuid: String,
+  collection_name: String,
+  name: String,
+  file_name: String,
+  mime_type: String,
+  disk: String,
+  conversions_disk: String,
+  size: Int,
+  manipulations: String,
+  custom_properties: String,
+  generated_conversions: String,
+  responsive_images: String,
+  order_column: Int,
+}
+
+type Address {
+    id: ID!,
+    address1: String,
+    address2: String,
+    country_id: Int,
+    state_id: Int,
+    city_id: Int,
+    postal_code: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    owner: Owner @morphTo
+}
+
+
+type AppointmentGoogleCalendar {
+    id: ID!,
+    user_id: Int!,
+    google_calendar_list_id: Int!,
+    google_calendar_id: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    googleCalendarList: GoogleCalendarList! @belongsTo
+}
+
+type Brand {
+    id: ID!,
+    name: String!,
+    email: String,
+    phone: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    medicines: [Medicine!] @hasMany,
+    category: Category! @belongsTo
+}
+
+type Category {
+    id: ID!,
+    name: String!,
+    is_active: Boolean!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    medicines: [Medicine!] @hasMany,
+    brand: Brand! @belongsTo
+}
+
+type City {
+    id: ID!,
+    name: String!,
+    state_id: Int!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    state: State! @belongsTo
+}
+
+type ClinicSchedule {
+    id: ID!,
+    day_of_week: String!,
+    start_time: String!,
+    end_time: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type Country {
+    id: ID!,
+    name: String!,
+    short_code: String,
+    phone_code: String,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type Currency {
+    id: ID!,
+    currency_name: String!,
+    currency_icon: String!,
+    currency_code: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type DoctorHoliday {
+    id: ID!,
+    name: String,
+    doctor_id: Int!,
+    date: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+
+type Enquiry {
+    id: ID!,
+    name: String!,
+    email: String!,
+    phone: String,
+    subject: String!,
+    message: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    view: Boolean!,
+    region_code: String
+}
+
+type Faq {
+    id: ID!,
+    question: String!,
+    answer: String!,
+    is_default: Boolean!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type FrontPatientTestimonial {
+    id: ID!,
+    name: String!,
+    designation: String!,
+    short_description: String!,
+    is_default: Boolean!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    media: [Media!]! @morphMany
+}
+
+type GoogleCalendarIntegration {
+    id: ID!,
+    user_id: Int!,
+    access_token: String!,
+    meta: String!,
+    last_used_at: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type GoogleCalendarList {
+    id: ID!,
+    user_id: Int!,
+    calendar_name: String!,
+    google_calendar_id: String!,
+    meta: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    appointmentGoogleCalendar: AppointmentGoogleCalendar! @belongsTo
+}
+
+type LiveConsultation {
+    id: ID!,
+    doctor_id: Int!,
+    patient_id: Int!,
+    consultation_title: String!,
+    consultation_date: DateTime!,
+    host_video: Boolean!,
+    participant_video: Boolean!,
+    consultation_duration_minutes: String!,
+    created_by: String!,
+    status: Int,
+    description: String,
+    meeting_id: String,
+    meta: String,
+    time_zone: String,
+    password: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    patient: Patient! @belongsTo,
+    doctor: Doctor! @belongsTo,
+    user: User! @belongsTo
+}
+
+type Medicine {
+    id: ID!,
+    category_id: Int,
+    brand_id: Int,
+    name: String!,
+    selling_price: Float!,
+    buying_price: Float!,
+    quantity: Int!,
+    available_quantity: Int!,
+    salt_composition: String!,
+    description: String,
+    side_effects: String,
+    currency_symbol: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    category: Category @belongsTo,
+    brand: Brand @belongsTo,
+    prescriptionMedicines: PrescriptionMedicineModal! @belongsTo,
+    usedMedicines: UsedMedicine! @belongsTo,
+    purchasedMedicine: PurchasedMedicine! @belongsTo
+}
+
+type MedicineBill {
+    id: ID!,
+    bill_number: String!,
+    patient_id: Int!,
+    doctor_id: Int,
+    model_type: String!,
+    model_id: String!,
+    discount: Float!,
+    net_amount: Float!,
+    total: Float!,
+    tax_amount: Float!,
+    payment_status: Int!,
+    payment_type: Int!,
+    note: String,
+    bill_date: DateTime!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    patient: Patient! @belongsTo,
+    doctor: Doctor @belongsTo,
+    saleMedicine: [SaleMedicine!]! @hasMany
+}
+
+type Notification {
+    id: ID!,
+    title: String,
+    type: String,
+    read_at: DateTime,
+    user_id: Int,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type Patient {
+    id: ID!,
+    patient_unique_id: String!,
+    user_id: Int!,
+    template_id: Int,
+    qr_code: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    address: Address @morphOne,
+    user: User! @belongsTo,
+    "patientUser: User! @belongsTo,"
+    patientUser: UserAV! @belongsTo,
+    smartPatientCard: SmartPatientCards @belongsTo,
+    appointments: [Appointment!]! @hasMany,
+    reviews: [Review!]! @hasMany,
+    media: [Media!]! @morphMany,
+    roles: [Role!]! @morphMany,
+    profile_image: String,
+    permissions: [Permission!]! @morphMany
+}
+
+type PaymentGateway {
+    id: ID!,
+    payment_gateway_id: Int!,
+    payment_gateway: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type Permission {
+    id: ID!,
+    name: String!,
+    display_name: String!,
+    guard_name: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type Prescription {
+    id: ID!,
+    appointment_id: Int!,
+    patient_id: Int!,
+    doctor_id: Int,
+    food_allergies: String,
+    tendency_bleed: String,
+    heart_disease: String,
+    high_blood_pressure: String,
+    diabetic: String,
+    surgery: String,
+    accident: String,
+    others: String,
+    medical_history: String,
+    current_medication: String,
+    female_pregnancy: String,
+    breast_feeding: String,
+    health_insurance: String,
+    low_income: String,
+    reference: String,
+    status: Boolean,
+    plus_rate: String,
+    temperature: String,
+    problem_description: String,
+    test: String,
+    advice: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    patient: Patient! @belongsTo,
+    doctor: Doctor @belongsTo,
+    getMedicine: [PrescriptionMedicineModal!]! @hasMany
+}
+
+type PrescriptionMedicineModal {
+    id: ID!,
+    prescription_id: Int!,
+    medicine: Int!,
+    dosage: String,
+    day: String,
+    dose_interval: Int!,
+    time: String,
+    comment: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    prescription: Prescription! @belongsTo,
+    medicines: [Medicine!]! @hasMany
+}
+
+type PurchaseMedicine {
+    id: ID!,
+    purchase_no: String!,
+    tax: Float!,
+    total: Float!,
+    net_amount: Float!,
+    payment_type: Int!,
+    discount: Float!,
+    note: String,
+    payment_note: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    purchasedMedcines: [PurchasedMedicine!]! @hasMany
+}
+
+type PurchasedMedicine {
+    id: ID!,
+    purchase_medicines_id: Int!,
+    medicine_id: Int,
+    expiry_date: DateTime,
+    lot_no: String!,
+    tax: Float!,
+    quantity: Int!,
+    amount: Float!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    medicines: Medicine @belongsTo
+}
+
+type Qualification {
+    id: ID!,
+    user_id: Int!,
+    degree: String!,
+    university: String!,
+    year: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type Review {
+    id: ID!,
+    patient_id: Int!,
+    doctor_id: Int!,
+    review: String!,
+    rating: Int!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    doctor: Doctor! @belongsTo,
+    patient: Patient! @belongsTo
+}
+
+type Role {
+    id: ID!,
+    name: String!,
+    display_name: String!,
+    is_default: Boolean!,
+    guard_name: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    permissions: [Permission!]! @belongsToMany,
+    users: [User!]! @morphMany
+}
+
+type SaleMedicine {
+    id: ID!,
+    medicine_bill_id: Int!,
+    medicine_id: Int!,
+    sale_quantity: Int!,
+    sale_price: Float!,
+    tax: Float!,
+    expiry_date: DateTime!,
+    amount: Float!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    medicine: Medicine! @belongsTo,
+    medicineBill: MedicineBill! @belongsTo
+}
+
+type Service {
+    id: ID!,
+    category_id: Int!,
+    name: String!,
+    charges: Float,
+    status: Boolean!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    short_description: String!,
+    serviceDoctors: [Doctor!]! @belongsToMany,
+    serviceCategory: ServiceCategory! @belongsTo,
+    media: [Media!]! @morphMany
+}
+
+type ServiceCategory {
+    id: ID!,
+    name: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    services: [Service!]! @hasMany,
+    activatedServices: [Service!]! @hasMany
+}
+
+type Setting {
+    id: ID!,
+    key: String!,
+    value: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    media: [Media!]! @morphMany,
+    roles: [Role!]! @morphMany,
+    permissions: [Permission!]! @morphMany
+}
+
+type Slider {
+    id: ID!,
+    title: String!,
+    short_description: String!,
+    is_default: Boolean!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    media: [Media!]! @morphMany
+}
+
+type SmartPatientCards {
+    id: ID!,
+    template_name: String!,
+    address: String!,
+    header_color: String!,
+    show_email: Boolean!,
+    show_phone: Boolean!,
+    show_dob: Boolean!,
+    show_blood_group: Boolean!,
+    show_address: Boolean!,
+    show_patient_unique_id: Boolean!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    patient: Patient @hasOne,
+    media: [Media!]! @morphMany,
+    roles: [Role!]! @morphMany,
+    permissions: [Permission!]! @morphMany
+}
+
+type Specialization {
+    id: ID!,
+    name: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    doctors: [Doctor!]! @belongsToMany
+}
+
+type Staff {
+    media: [Media!]! @morphMany,
+    roles: [Role!]! @morphMany,
+    permissions: [Permission!]! @morphMany
+}
+
+type State {
+    id: ID!,
+    name: String!,
+    country_id: Int!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    country: Country! @belongsTo
+}
+
+type Subscribe {
+    id: ID!,
+    email: String!,
+    subscribe: Boolean!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type Transaction {
+    id: ID!,
+    user_id: Int!,
+    transaction_id: String!,
+    appointment_id: String!,
+    amount: Float!,
+    type: Int!,
+    status: Boolean,
+    accepted_by: Int,
+    meta: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    user: User! @belongsTo
+}
+
+type UsedMedicine {
+    id: ID!,
+    stock_used: Int!,
+    medicine_id: Int,
+    model_id: Int!,
+    model_type: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type UserGoogleAppointment {
+    id: ID!,
+    user_id: Int!,
+    appointment_id: String!,
+    google_calendar_id: String!,
+    google_event_id: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    user: User! @belongsTo
+}
+
+type UserZoomCredential {
+    id: ID!,
+    user_id: Int!,
+    zoom_api_key: String!,
+    zoom_api_secret: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    user: User! @belongsTo
+}
+
+type Visit {
+    id: ID!,
+    visit_date: String!,
+    doctor_id: Int!,
+    patient_id: Int!,
+    description: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    visitDoctor: Doctor! @belongsTo,
+    doctor: Doctor! @belongsTo,
+    patient: Patient! @belongsTo,
+    visitPatient: Patient! @belongsTo,
+    problems: [VisitProblem!]! @hasMany,
+    observations: [VisitObservation!]! @hasMany,
+    notes: [VisitNote!]! @hasMany,
+    prescriptions: [VisitPrescription!]! @hasMany
+}
+
+type VisitNote {
+    id: ID!,
+    note_name: String!,
+    visit_id: Int!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    visit: Visit! @belongsTo
+}
+
+type VisitObservation {
+    id: ID!,
+    observation_name: String!,
+    visit_id: Int!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    visit: Visit! @belongsTo
+}
+
+type VisitPrescription {
+    id: ID!,
+    visit_id: Int!,
+    prescription_name: String!,
+    frequency: String!,
+    duration: String!,
+    description: String,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type VisitProblem {
+    id: ID!,
+    problem_name: String!,
+    visit_id: Int!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    visit: Visit! @belongsTo
+}
+
+type ZoomOAuth {
+    id: ID!,
+    user_id: Int!,
+    access_token: String!,
+    refresh_token: String!,
+    created_at: DateTime,
+    updated_at: DateTime
+}
+
+type User {
+    id: ID!,
+    first_name: String!,
+    last_name: String!,
+    email: String!,
+    contact: String,
+    dob: Date,
+    gender: Int,
+    status: Boolean!,
+    language: String,
+    email_verified_at: DateTime,
+    password: String!,
+    type: Int,
+    blood_group: String,
+    region_code: String,
+    remember_token: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    email_notification: Boolean!,
+    time_zone: String,
+    dark_mode: Boolean!,
+    api_token: String,
+     description: String # Добавленное поле
+    address: Address @morphOne,
+    doctor: Doctor @hasOne,
+    qualifications: [Qualification!]! @hasMany,
+    patient: Patient @hasOne,
+    staff: Staff @hasOne,
+    gCredentials: GoogleCalendarIntegration @hasOne,
+    media: [Media!]! @morphMany,
+    roles: [Role!]! @morphMany,
+    permissions: [Permission!]! @morphMany
+    profile_image: String
+}
+
+type Doctor {
+    id: ID!,
+    user_id: Int!,
+    experience: Float,
+    twitter_url: String,
+    linkedin_url: String,
+    instagram_url: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    user: User! @belongsTo,
+    doctorUser: UserAV @belongsTo,
+    testUser: User! @belongsTo,
+    specializations: [Specialization!]! @belongsToMany,
+    doctorSession: [DoctorSession!]! @hasMany,
+    appointments: [Appointment!]! @hasMany,
+    address: Address @morphOne,
+    reviews: [Review!]! @hasMany
+}
+
+union Owner = Doctor | Patient | User
+
+type PaginatorInfo {
+  "Number of items in the current page."  
+  count: Int!
+  "Index of the current page."
+  currentPage: Int!
+  "Index of the first item in the current page."
+  firstItem: Int
+  "Are there more pages after this one?"
+  hasMorePages: Boolean!
+  "Index of the last item in the current page."
+  lastItem: Int
+  "Index of the last available page."
+  lastPage: Int!
+  "Number of items per page."
+  perPage: Int!
+  "Number of total available items."
+  total: Int!
+}
+
+input OrderByInput {
+    orderBy: OrderByField!
+    orderDirection: OrderDirection!
+}
+
+enum OrderByField {
+    date
+    id
+    # Add other fields you want to sort by
+}
+
+enum OrderDirection {
+    DESC
+    ASC
+}
+
+type AVUserResult {
+    user: UserAV!
+    token: String!
+    json_user: String
+}
+
+type UserAV {
+    id: ID!,
+    first_name: String!,
+    last_name: String!,
+    full_name: String!,
+    email: String!,
+    contact: String,
+    dob: Date,
+    gender: Int,
+    status: Boolean!,
+    language: String,
+    email_verified_at: DateTime,
+    password: String!,
+    type: Int,
+    blood_group: String,
+    region_code: String,
+    remember_token: String,
+    created_at: DateTime,
+    updated_at: DateTime,
+    email_notification: Boolean!,
+    time_zone: String,
+    dark_mode: Boolean!,
+    api_token: String,
+     description: String # Добавленное поле
+    address: Address @morphOne,
+    doctor: Doctor @hasOne,
+    patient: Patient @hasOne,
+    qualifications: [Qualification!]! @hasMany,
+    patient_id: String,
+    staff: Staff @hasOne,
+    gCredentials: GoogleCalendarIntegration @hasOne,
+    media: [Media!]! @morphMany,
+    roles: [Role!]! @morphMany,
+    permissions: [Permission!]! @morphMany,
+    profile_image: String,
+    doctor_id: String,
+    role_name: String,
+    json_user: String
+}
+
+type Appointment {
+    id: ID!,
+    doctor_id: Int!,
+    patient_id: Int!,
+    date: String!,
+    from_time: String!,
+    from_time_type: String!,
+    room_data               :   String,
+    to_time                 :   String!,
+    to_time_type            :   String!,
+    status                  :   String!,
+    description             :   String,
+    service_id              :   String!,
+    payable_amount          :   String!,
+    payment_type            :   String!,
+    payment_method          :   String!,
+    appointment_unique_id   :   String!,
+    created_at              :   DateTime,
+    updated_at              :   DateTime,
+    doctor                  :   Doctor! @belongsTo,
+    patient                 :   Patient! @belongsTo
+}
+
+"Input for updating user documents - 14 марта 2025 год пробую добавить документы"
+input UpdateUserDocumentsInput {
+    
+    document_image: Upload
+}
+"ответ про документы"
+type UpdateUserDocumentsResponse {
+    user: UserAV!
+    token: String
+    role: String
+    status: String!
+}
+"Input for updating user profile"
+input UpdateUserProfileInput {
+    first_name: String
+    last_name: String
+    email: String @rules(apply: ["email"])
+    contact: String
+    dob: Date
+    gender: Int
+    language: String
+    blood_group: String
+    region_code: String
+    time_zone: String
+    dark_mode: Boolean
+    email_notification: Boolean
+    profile_image: Upload
+     description: String # Добавленное поле
+}
+
+
+"Response after updating user profile - добавил токен и роль"
+type UpdateUserProfileResponse {
+    user: UserAV!
+    token: String
+    role: String
+    status: String!
+}
+type UpdateUserProfileResponseTest {
+    user: UserAV!
+    role: String!
+    token: String
+    status: String!
+    doctorId               :   String,
+    patientId              :   String
+}
+type Query {
+    user(id: ID! @eq): User @find
+    users: [User!]! @paginate
+    doctor(id: ID! @eq): Doctor @find
+    doctors: [Doctor!] @paginate
+    appointment(id: ID! @eq): Appointment @find
+    appointments(orderBy: OrderByInput,patient_id: String! @eq): [Appointment!]! @all
+    appointmentsbydoctor(doctor_id: String! @eq): [Appointment!]! @all
+    "Время приема доктора"
+    sessionsBydoctorId(doctor_id: Int! @eq): [DoctorSession!]! @all
+    me: User @auth(guard: "api")
+    hello: String 
+    greet(name: String = "human"): String
+}
+
+"Ввод данных для регистрации Пользователя"
+input RegisterUserInput {
+    name: String!
+    email: String! @rules(apply: ["bail", "email", "unique:users,email"])
+    password: String! @rules(apply: ["confirmed"])
+    password_confirmation: String!
+    verification_url: VerificationUrlInput
+    role: String
+}
+
+"Ответ после регистрации Пользователя"
+type RegisterUserResponse {
+    token: String
+    status: RegisterStatus!
+}
+
+type DoctorSession {
+    id: ID!,
+    doctor_id: String!,
+    session_meeting_time: String!,
+    session_gap: String!,
+    created_at: DateTime,
+    updated_at: DateTime,
+    doctor: Doctor! @belongsTo
+    sessionWeekDays: [WeekDay] @hasMany,
+}
+
+type WeekDay {
+    id: ID!,
+    doctor_id: Int,
+    day_of_week: Int,
+    start_time: String,
+    start_time_type: String,
+    end_time: String,
+    end_time_type: String,
+    doctor_session_id: String!,
+    doctorSession: DoctorSession! @belongsTo
+}
+
+input WeekDayInput {
+    day_of_week: Int,
+    start_time: String,
+    start_time_type: String,
+    end_time: String,
+    end_time_type: String,
+}
+
+type Mutation {
+    "Update user profile documents"
+    updateUserDocuments(input: UpdateUserDocumentsInput!): UpdateUserDocumentsResponse! @field(resolver: "App\\GraphQL\\Mutations\\UpdateUserDocuments")
+    "Update user profile settings"
+    updateUserProfile(input: UpdateUserProfileInput!): UpdateUserProfileResponse! @field(resolver: "App\\GraphQL\\Mutations\\UpdateUserProfile")
+    updateUserProfileTest(input: UpdateUserProfileInput!): UpdateUserProfileResponseTest! @field(resolver: "App\\GraphQL\\Mutations\\UpdateUserProfileTest")
+
+    "Создать значения расписания доктора"
+    upsertSessionsCustom(
+        doctor_id: Int!,
+        session_meeting_time: Int!,
+        session_gap: Int!,
+        sessionWeekDays: [WeekDayInput!]!       
+     ): DoctorSession!
+
+    "Изменить значения расписания доктора"
+    updateSsessions(
+        id: ID!,
+        doctor_id: Int!,
+        session_meeting_time: Int!,
+        session_gap: Int!,
+        sessionWeekDays: [WeekDay]
+     ): DoctorSession! @update
+  
+    registerUser(input: RegisterUserInput @spread): RegisterUserResponse!
+
+    loginwithuserresult(input: LoginInput @spread): AVUserResult
+
+    createroom(appointment_id: String!): String
+  
+    createAppointment(
+        doctor_id: String!
+        date: String!
+        patient_id: String!
+        status: String!
+        from_time: String!
+        from_time_type: String!
+        to_time: String!
+        to_time_type: String!
+        description: String!
+        service_id: String!
+        payment_type: String!
+        payable_amount: String!
+        appointment_unique_id: String
+    ): Appointment! @create
+}
+
+#import sanctum.graphql

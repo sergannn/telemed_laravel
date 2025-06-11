@@ -1,0 +1,250 @@
+@extends('layouts.app')
+
+@section('title', __('messages.custom_page.title'))
+
+@section('content')
+<!--<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.8.2.7.js"></script> 
+<script src="{{ asset('/js/webrtc-v2.js')}}"></script>
+<script src="{{ asset('js/pub.js') }}"></script>-->
+<script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+<script>
+  function createFrameAndJoinRoom() {
+    const call = Daily.createFrame({
+  iframeStyle: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+});
+    call.join({ url: 'https://ser-tele-med.daily.co/Leendows87' });
+  }
+</script>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Сеанс</div>
+
+                    <div class="card-body">
+                        <div id="herenow-data"></div>
+                        
+                        <button onclick="createFrameAndJoinRoom()" id="video-switch">Start Video</button>
+                        <button id="check-status-btn">Проверка связи</button>
+                        <div id="video-out" class="d-flex justify-content-center align-items-center"></div>
+                        <div id="loading" class="d-flex justify-content-center align-items-center" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="ms-2">Waiting for call...</p>
+                        </div>
+                        <div id="video-container"> Загрузка видео...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+<style>
+    /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* PubNub Logo */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+#pubnub-logo {
+    text-align: center;
+    position: absolute;
+    top: -120px;
+    width: 100%;
+}
+#pubnub-logo-img {
+    background: url(../img/pubnub.png);
+    display: inline-block;
+    background-size: 128px 28px;
+    width: 128px;
+    height: 28px;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+}
+#pubnub-relative,
+.pubnub-relative {
+    position: relative;
+}
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* PubNub Chat */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+#pubnub-chat-section {
+    margin: 0px;
+}
+#pubnub-chat-input {
+    width: 100%;
+    margin: 0px 0px 20px 0px;
+    outline: 0;
+    border: 0px;
+    border-bottom: 2px solid #eee;
+    font-size: 20px;
+    font-weight: 100;
+    font-family: "Helvetica Neue";
+}
+/* chat box output */
+#pubnub-chat-output {
+    text-align: left;
+    overflow: scroll;
+    overflow-x: hidden;
+    margin: 20px 0px 20px 0px;
+    height: 200px;
+    font-size: 14px;
+    font-weight: 200;
+    font-family: "Helvetica Neue";
+    outline: 0;
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+#pubnub-chat-output div {
+    margin: 8px 10px;
+    border-bottom: 1px solid #f8f8f8;
+}
+
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* Phone Number Display */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+#my-number-section {
+    margin: 10px 0px 40px 0px;
+}
+#my-number-title {
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 400;
+}
+#my-number {
+    font-size: 110px;
+    line-height: 180px;
+    font-weight: 100;
+}
+#my-number-permalink {
+    border-radius: 10px;
+    padding: 8px;
+    display: inline-block;
+    background-color: #e6e4e4;
+    text-shadow: 0px 0px 1px rgba(0,0,0,0.4);
+}
+#my-number-permalink,
+#my-number-permalink a {
+    margin: 20px 0 0 0;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    color: #fff;
+}
+#my-number-permalink a {
+    color: #428bca;
+    text-shadow: 0px 0px 1px rgba(255,255,0,0.9);
+}
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* Video Display */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+#video-border {
+    padding: 10px;
+    margin: 20px 0px;
+    overflow: hidden;
+}
+#video-display {
+    height: 340px;
+    text-align: center;
+    color: #eee;
+    font-size: 150px;
+    line-height: 340px;
+}
+#video-self {
+    position: absolute;
+    height: 340px;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    font-size: 0px;
+    line-height: 0px;
+}
+#video-display video,
+#video-self img {
+    border-radius: 6px;
+    height: 300px;
+}
+#video-thumbnail {
+    position: absolute;
+    top: -380px;
+    right: 10px;
+}
+#video-thumbnail img {
+    width: 72px;
+    height: 54px;
+    border-radius: 60px;
+    border: 0;
+    opacity: 0.8;
+}
+
+.dial-buttons .btn {
+    width: 30%;
+}
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* Small Screens */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+@media (max-width: 768px) {
+    #video-border {
+        margin: 0 0 10px 0;
+        padding: 0;
+    }
+    #my-number-section {
+        margin: 10px 0px;
+    }
+    #my-number {
+        font-size: 32px;
+        line-height: 44px;
+        font-weight: normal;
+    }
+    #my-number::before {
+        content: "Your number is: ";
+        font-weight: 100;
+        color: #878787;
+    }
+    #pubnub-chat-input {
+        margin: 0 0 8px 0;
+    }
+    #pubnub-chat-output {
+        margin: 0;
+        font-size: 16px;
+        height: auto;
+        max-height: 200px;
+    }
+    #pubnub-chat-output div {
+        font-weight: 200;
+        margin: 2px;
+        border-bottom: none;
+    }
+    #video-display {
+        height: 240px;
+        line-height: 240px;
+    }
+    #video-self {
+        height: 240px;
+    }
+    #pubnub-logo {
+        top: -50px;
+        width: 100%;
+    }
+    .col-xs-7, .col-xs-5 {
+        padding-right: 0;
+    }
+    #video-thumbnail {
+        top: -245px;
+        right: 5px;
+    }
+}
+
+</style>

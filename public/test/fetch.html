@@ -1,0 +1,42 @@
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+<script>
+const query = `
+  query GetUser($userId: ID!) {
+    user(id: $userId) {
+      id
+      name
+      email
+    }
+  }
+`;
+
+const variables = {
+  userId: '12345'
+};
+
+fetch('http://45.90.32.229/graphql', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+  body: JSON.stringify({
+    query: query,
+    variables: variables
+  })
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+})
+.then(data => {
+  console.log(data);
+  // Process the data as needed
+})
+.catch(error => {
+  console.error('There was a problem with the fetch operation:', error.message);
+});
+</script>

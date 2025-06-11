@@ -1,0 +1,73 @@
+
+<body>
+    <input type="file" id="fileInput" accept="image/*">
+    <button id="uploadButton">Upload</button>
+    <div id="status"></div>
+
+<script>
+    const UPDATE_USER_PROFILE = `
+        mutation {
+          updateUserProfile(input: {
+            first_name: "Alex"
+            email: "doctor@infycare.com"
+            profile_image: null
+          }) {
+            user {
+              id
+              first_name
+              last_name
+              profile_image
+              email
+            }
+            status
+          }
+        }
+      `;
+      
+      function updateUserProfile(token) {
+        console.log('trying');
+        const formData = new FormData();
+        
+        // Read avatar.jpg from current directory
+        const file = document.querySelector('input[type="file"]').files[0];
+        
+        if (!file) {
+          alert('Please select a file');
+          return;
+        }
+      
+        formData.append('0', file);
+        formData.append('operations', JSON.stringify({
+          query: UPDATE_USER_PROFILE
+        }));
+      
+        // Map file to the profile_image field
+        const map = {
+          "0": ["updateUserProfile.input.profile_image"]
+        };
+        formData.append('map', JSON.stringify(map));
+      
+        fetch('https://onlinedoctor.su/graphql', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.errors) {
+            throw new Error(result.errors[0].message);
+          }
+          document.getElementById('status').innerHTML = 'Profile updated successfully!';
+        })
+        .catch(error => {
+          document.getElementById('status').innerHTML = `Error: ${error.message}`;
+        });
+      }
+      
+      document.getElementById('uploadButton').addEventListener('click', () => {
+        updateUserProfile('SNIh9ckPUKOVO0HqxX5DVKVPmI309nrAs88kUsPEd1d64059');
+      });
+      
+    </script>

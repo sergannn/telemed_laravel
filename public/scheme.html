@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8">
+
+    <script src="
+https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js
+"></script>
+
+
+</head>
+<body>
+        Here is a mermaid diagram:
+        <pre class="mermaid">
+            graph TD
+              Loading[Экран загрузки]:::loading --> Onboarding1[Первый экран ознакомления]:::loading
+            Onboarding1 --> Onboarding2[Второй экран ознакомления]:::loading
+            Onboarding2 --> Onboarding3[Третий экран ознакомления]:::loading
+            Onboarding3 --> AuthForm[Форма авторизации]:::auth
+            
+            AuthForm --> |Регистрация| Register[Экран регистрации]:::auth
+            AuthForm --> |Забыл пароль| PasswordRecovery[Восстановление пароля]:::auth
+            AuthForm --> |Вход| MainScreen[Основной экран]:::main
+            Register --> |Автоматическая авторизация| MainScreen
+            
+             MainScreen --> |Нижнее меню| Profile[Профиль]:::bottomTab
+            Profile --> |Выход из аккаунта| LogOut[выход]
+            Profile --> |Мой кошелек| Wallet[кошелек]
+            Profile --> |FAQ| FAQ[вопросы и предложения]
+              FAQ[ЧаЗВ]--> |Вопросы и ответы| Question1[вопрос1]
+              FAQ[ЧаЗВ]--> |Вопросы и ответы| Question2[вопрос2]
+              FAQ[ЧаЗВ]--> |Вопросы и ответы| Question3[вопрос3]
+              FAQ[ЧаЗВ]--> |Вопросы и ответы| Question4[вопрос4]
+            LogOut --> |Переход на авторизацию| AuthForm[авторизация]
+            Profile --> |настройки| Settings[настройки]
+            Profile --> |сеансы| MyAppointments[мои сеансы]
+            
+            MainScreen --> |Нижнее меню| Appointments[Записи]:::bottomTab
+            Appointments --> |Таб бар| AppointmentsNext[Предстоящие]
+            Appointments --> |Таб бар| AppointmentsPast[Прошедшие]
+            AppointmentsPast --> |Заявка на получение записи| AppointmentRecording
+            AppointmentsNext --> |Детали записи| AppointmentsInfo
+            AppointmentsInfo --> |Начать сеанс| DailyChat
+            
+            MainScreen --> |Нижнее меню| Home[Главная]:::bottomTab
+            Home --> |Таб бар| PopularDoctors[Популярные врачи]
+            PopularDoctors --> DoctorProfile[Профиль доктора]
+            PopularDoctors --> BookDoctor0[Запись к доктору]
+            BookDoctor0 --> BookDoctor1[выбор даты]
+            BookDoctor1 --> BookDoctor2[выбор времени]
+            BookDoctor2 --> BookSuccess[успешная запись]
+            
+            MainScreen --> |Нижнее меню| Health[Здоровье]:::bottomTab
+            Health --> |Таб бар| Specs[Специализации]
+            Specs --> |Таб бар| FindDoctor[Поиск докторов по категории]
+            
+            MainScreen --> |Нижнее меню| Assistant[Помощник]:::bottomTab
+            Assistant --> |Таб бар| Chat[Чат-бот]
+        </pre>
+      </body>
+  
+   <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  
+</script>
+</html>

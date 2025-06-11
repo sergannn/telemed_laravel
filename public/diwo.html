@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8">
+
+    <script src="
+https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js
+"></script>
+
+
+</head>
+<body>
+        Here is a mermaid diagram:
+       
+      <pre class="mermaid">
+            graph TD
+            classDef someclass fill:#f96
+            classDef secClass fill:#f91
+            Start[Старт] --> S1["Экран 1"]:::splash
+            S1 --> S2["Экран 2"]:::splash
+            S2 --> S3["Экран 3"]:::splash
+            S3 --> Auth["Авторизация\n(Ввод номера)"]:::auth
+            %% Bottom Navigation
+            Nav--> Back["Меню"]:::nav
+            Nav --> Puzzles["Коллекции"]:::nav
+            %% Main Navigation
+            Auth --> Home["Главный экран"]:::main
+            Home:::someclass --> Profile["Профиль"]:::menu
+              Profile["`Профиль`"]
+            Profile:::someclass --> Puzzles["Коллекция пазлов"]:::menu
+            Profile --> Treasures["Коллекция кладов"]:::menu
+            Profile --> Settings["Настройки"]:::settings
+            Home --> Map["Карта"]:::someclass
+            Home --> Nav["Нижнее меню"]:::secClass
+        
+       
+        
+            %% Puzzle Flow
+           
+            Puzzles -->|Сетка квадратов| PuzzleDetail["Детальный просмотр\nпазла"]:::puzzle
+        
+            %% Treasure Flow
+          
+            Treasures -->|Разворачивающийся список| Cards["Карточки кладов"]:::treasure
+        
+            %% Map Interactions
+            Map --> Search["Поиск"]:::map
+            Search --> Found{"Найден?"}:::map
+            Found -->|Да| FoundPopup["Попап найденного вклада"]:::popup
+            FoundPopup --> Collection["Добавление в коллекцию"]:::collection
+            Found -->|Нет| TryAgain["Попробуйте еще раз"]:::popup
+            Search --> Cancel["Отмена"]:::map
+        
+      
+        </pre>
+      </body>
+  
+   <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true});//,  securityLevel: 'loose', });
+  
+</script>
+</html>

@@ -1,0 +1,20 @@
+Untitled:
+  url: https://onlinedoctor.su/graphql
+  method: POST
+  headers: {}
+  body: |-
+    mutation {
+        CustomRegister(input: {
+            name: "John Doe"
+            email: "alex@sms-pr.ru"
+            password: "secret"
+            password_confirmation: "secret"
+            role: ""
+            verification_url: {
+    url: "https://onlinedoctor.su/verify-email?id=__ID__&token=__HASH__&expires=__EXPIRES__&signature=__SIGNATURE__"
+            }
+        }) {
+            token
+            status
+        }
+    }

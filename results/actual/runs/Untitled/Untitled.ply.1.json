@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Untitled",
+    "test": "Untitled",
+    "type": "request",
+    "start": "2024-11-17T13:08:52.612Z",
+    "end": "2024-11-17T13:08:52.613Z",
+    "result": {
+      "status": "Errored",
+      "message": "Request 'Untitled' ERRORED in 1 ms: Cannot read properties of undefined (reading 'Untitled')"
+    }
+  }
+]

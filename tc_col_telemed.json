@@ -1,0 +1,131 @@
+{
+    "_id": "8e7598e9-9ec1-4d2a-ad91-154c4de8aa60",
+    "colName": "telemed",
+    "created": "2024-11-19T19:08:05.226Z",
+    "sortNum": 10000,
+    "folders": [
+        {
+            "_id": "09af920a-746a-483a-a59b-9a6016ae6110",
+            "name": "graphql no auth",
+            "containerId": "",
+            "created": "2024-11-19T19:08:48.577Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "ee34363e-ab0b-4f61-8b21-257347e02101",
+            "name": "Query",
+            "containerId": "09af920a-746a-483a-a59b-9a6016ae6110",
+            "created": "2024-11-20T15:14:59.528Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "1ee2be58-c26c-497f-bd72-3215c785c572",
+            "name": "Mutations",
+            "containerId": "09af920a-746a-483a-a59b-9a6016ae6110",
+            "created": "2024-11-20T15:15:20.122Z",
+            "sortNum": 30000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "ba300191-1e8f-4566-8352-86f20ac5c8f1",
+            "colId": "8e7598e9-9ec1-4d2a-ad91-154c4de8aa60",
+            "containerId": "ee34363e-ab0b-4f61-8b21-257347e02101",
+            "name": "query doctors",
+            "url": "https://onlinedoctor.su/graphql",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-11-19T19:09:07.899Z",
+            "modified": "2024-11-19T19:17:41.561Z",
+            "headers": [],
+            "body": {
+                "type": "graphql",
+                "raw": "",
+                "form": [],
+                "graphql": {
+                    "query": "query doctors {\n      doctors(first: 108) {\n        data {\n            doctor_id: id\n            specializations {\n                name\n            }\n            doctorUser {\n                user_id: id \n                username: full_name\n                first_name\n                last_name\n                photo: profile_image\n            }\n        }\n        paginatorInfo {\n          total\n          currentPage\n          hasMorePages\n        }\n      }\n    }"
+                }
+            }
+        },
+        {
+            "_id": "5f737ddc-f12a-4579-9ca7-34a461aca29b",
+            "colId": "8e7598e9-9ec1-4d2a-ad91-154c4de8aa60",
+            "containerId": "ee34363e-ab0b-4f61-8b21-257347e02101",
+            "name": "query appointmentsbydoctor",
+            "url": "https://onlinedoctor.su/graphql",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2024-11-20T14:28:28.412Z",
+            "modified": "2024-11-20T14:29:13.537Z",
+            "headers": [],
+            "body": {
+                "type": "graphql",
+                "raw": "",
+                "form": [],
+                "graphql": {
+                    "query": "query {\n  appointmentsbydoctor(doctor_id: \"1\") {\n    id\n    appointment_unique_id\n    doctor {\n      doctor_id: id\n      doctorUser {\n        user_id: id\n        username: full_name\n        first_name\n        last_name\n        photo: profile_image\n      }\n    }\n    description\n    status\n    date\n    from_time\n    from_time_type\n    to_time\n    to_time_type\n    room_data\n  }\n}"
+                }
+            }
+        },
+        {
+            "_id": "f72f5724-e0a9-4804-9be1-61a83b6b35eb",
+            "colId": "8e7598e9-9ec1-4d2a-ad91-154c4de8aa60",
+            "containerId": "ee34363e-ab0b-4f61-8b21-257347e02101",
+            "name": "query sessionsBydoctorId",
+            "url": "https://onlinedoctor.su/graphql",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-11-20T15:01:12.129Z",
+            "modified": "2024-11-20T21:18:15.145Z",
+            "headers": [],
+            "body": {
+                "type": "graphql",
+                "raw": "",
+                "form": [],
+                "graphql": {
+                    "query": "query {\n  sessionsBydoctorId(doctor_id: 14) {\n    id\n    doctor_id\n    doctor {\n      doctor_id: id\n      doctorUser {\n        user_id: id\n        username: full_name\n        first_name\n        last_name\n        photo: profile_image\n      }\n    }\n    session_meeting_time\n    session_gap\n    sessionWeekDays {\n            day_of_week\n            start_time\n            start_time_type\n            end_time\n            end_time_type\n\n        }\n    \n    \n  }\n}"
+                }
+            }
+        },
+        {
+            "_id": "567f4d5a-8e8f-4fd3-b99c-7447a57c0274",
+            "colId": "8e7598e9-9ec1-4d2a-ad91-154c4de8aa60",
+            "containerId": "1ee2be58-c26c-497f-bd72-3215c785c572",
+            "name": "mutation upsertSessionsCustom",
+            "url": "https://onlinedoctor.su/graphql",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-11-20T15:12:03.307Z",
+            "modified": "2024-11-20T21:13:16.065Z",
+            "headers": [],
+            "body": {
+                "type": "graphql",
+                "raw": "",
+                "form": [],
+                "graphql": {
+                    "query": "mutation {\n  upsertSessionsCustom(\n    doctor_id: 14\n    session_meeting_time: 5,\n    session_gap: 20,\n    sessionWeekDays: [\n    { \n        day_of_week: 1, \n        start_time: \"12:00\", \n        start_time_type: \"AM\", \n        end_time: \"11:45\", \n        end_time_type: \"PM\" \n    },\n    { \n        day_of_week: 2, \n        start_time: \"12:00\", \n        start_time_type: \"AM\", \n        end_time: \"11:45\", \n        end_time_type: \"PM\" \n    },\n    { \n        day_of_week: 3, \n        start_time: \"12:00\", \n        start_time_type: \"AM\", \n        end_time: \"11:45\", \n        end_time_type: \"PM\" \n    },\n    { \n        day_of_week: 4, \n        start_time: \"12:00\", \n        start_time_type: \"AM\", \n        end_time: \"11:45\", \n        end_time_type: \"PM\" \n    },\n    { \n        day_of_week: 5, \n        start_time: \"12:00\", \n        start_time_type: \"AM\", \n        end_time: \"11:45\", \n        end_time_type: \"PM\" \n    },\n    { \n        day_of_week: 6, \n        start_time: \"12:00\", \n        start_time_type: \"AM\", \n        end_time: \"11:45\", \n        end_time_type: \"PM\" \n    }\n    ]\n    ) { \n    id \n    \n    }\n}"
+                }
+            }
+        },
+        {
+            "_id": "38b8e0de-185a-42d9-824b-1654cc686cb3",
+            "colId": "8e7598e9-9ec1-4d2a-ad91-154c4de8aa60",
+            "containerId": "1ee2be58-c26c-497f-bd72-3215c785c572",
+            "name": "mutation updateSsessions",
+            "url": "https://onlinedoctor.su/graphql",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-11-20T16:39:22.248Z",
+            "modified": "2024-11-20T19:11:26.962Z",
+            "headers": [],
+            "body": {
+                "type": "graphql",
+                "raw": "",
+                "form": [],
+                "graphql": {
+                    "query": "mutation {\n  updateSsessions(\n    id: 26,\n    doctor_id: 14\n    session_meeting_time: 5,\n    session_gap: 20,\n    session_week_days: [\n        {\n            doctor_session_id: \"26\",\n            doctor_id: \"14\",\n            day_of_week: \"2\",\n            start_time: \"12:00\",\n            start_time_type: \"AM\",\n            end_time: \"11:45\",\n            end_time_type: \"PM\"\n      }\n    ]\n    \n    ) \n    {\n        id\n    }\n}"
+                }
+            }
+        }
+    ]
+}
