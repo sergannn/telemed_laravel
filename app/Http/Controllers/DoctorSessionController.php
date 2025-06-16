@@ -190,7 +190,9 @@ class DoctorSessionController extends AppBaseController
         $bookingSlot = [];
         foreach ($appointments as $appointment) {
             if ($appointment->date == $request->date) {
-                $bookedSlot[] = $appointment->from_time.' '.$appointment->from_time_type.' - '.$appointment->to_time.' '.$appointment->to_time_type;
+         //       $bookedSlot[] = $appointment->from_time.' '.$appointment->from_time_type.' - '.$appointment->to_time.' '.$appointment->to_time_type;
+         $bookedSlot[] = date('H:i', strtotime($appointment->from_time.' '.$appointment->from_time_type)).' - '.date('H:i', strtotime($appointment->to_time.' '.$appointment->to_time_type));
+         
             }
         }
 
@@ -226,7 +228,8 @@ class DoctorSessionController extends AppBaseController
                             if (in_array(($slotStartTime.' - '.$slotEndTime), $bookingSlot)) {
                                 break;
                             }
-                            $bookingSlot[] = $slotStartTime.' - '.$slotEndTime;
+                       //     $bookingSlot[] = $slotStartTime.' - '.$slotEndTime;
+                       $bookingSlot[] = date('H:i', strtotime($slotStartTime)).' - '.date('H:i', strtotime($slotEndTime));
                         }
                     }
                 } else {
@@ -235,7 +238,9 @@ class DoctorSessionController extends AppBaseController
                             $bookingSlot)) {
                             break;
                         }
-                        $bookingSlot[] = date('h:i A', strtotime($slot[0])).' - '.date('h:i A', strtotime($slot[1]));
+                      //  $bookingSlot[] = date('h:i A', strtotime($slot[0])).' - '.date('h:i A', strtotime($slot[1]));
+                        $bookingSlot[] = date('H:i', strtotime($slot[0])).' - '.date('H:i', strtotime($slot[1]));
+
                     }
                 }
             }

@@ -892,6 +892,10 @@ type Mutation {
     updateUserProfile(input: UpdateUserProfileInput!): UpdateUserProfileResponse! @field(resolver: "App\\GraphQL\\Mutations\\UpdateUserProfile")
     updateUserProfileTest(input: UpdateUserProfileInput!): UpdateUserProfileResponseTest! @field(resolver: "App\\GraphQL\\Mutations\\UpdateUserProfileTest")
 
+  cancelAppointment(
+        id: ID! @rules(apply: ["required", "exists:appointments,id"])
+    ): CancelAppointmentResponse! @field(resolver: "App\\GraphQL\\Mutations\\CancelAppointment")
+
     "Создать значения расписания доктора"
     upsertSessionsCustom(
         doctor_id: Int!,
@@ -931,5 +935,9 @@ type Mutation {
         appointment_unique_id: String
     ): Appointment! @create
 }
-
+type CancelAppointmentResponse {
+    success: Boolean!
+    message: String
+    appointment: Appointment
+}
 #import sanctum.graphql
